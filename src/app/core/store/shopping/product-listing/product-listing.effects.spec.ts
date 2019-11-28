@@ -133,9 +133,9 @@ describe('Product Listing Effects', () => {
           page: undefined
         [Filter Internal] Load Products For Filter:
           id: {"type":"search","value":"term","filters":"blablubb"}
-          searchParameter: "YmxhYmx1YmI="
-        [Filter] Apply Filter:
-          searchParameter: "YmxhYmx1YmI="
+          searchParameter: "blablubb"
+        [Shopping] Apply Filter:
+          searchParameter: "blablubb"
       `);
     }));
 
@@ -152,9 +152,9 @@ describe('Product Listing Effects', () => {
           page: undefined
         [Filter Internal] Load Products For Filter:
           id: {"type":"category","value":"cat","filters":"blablubb"}
-          searchParameter: "YmxhYmx1YmI="
-        [Filter] Apply Filter:
-          searchParameter: "YmxhYmx1YmI="
+          searchParameter: "blablubb"
+        [Shopping] Apply Filter:
+          searchParameter: "blablubb"
       `);
     }));
   });

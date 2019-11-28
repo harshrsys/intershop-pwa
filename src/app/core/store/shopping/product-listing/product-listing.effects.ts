@@ -1,7 +1,6 @@
 import { Inject, Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { Store, select } from '@ngrx/store';
-import b64u from 'b64u';
 import { isEqual } from 'lodash-es';
 import { distinctUntilChanged, filter, map, mapTo, mergeMap, switchMap, take } from 'rxjs/operators';
 
@@ -10,7 +9,8 @@ import {
   PRODUCT_LISTING_ITEMS_PER_PAGE,
 } from 'ish-core/configurations/injection-keys';
 import { ProductListingMapper } from 'ish-core/models/product-listing/product-listing.mapper';
-import { ProductCompletenessLevel, ProductHelper } from 'ish-core/models/product/product.model';
+import { ProductListingView } from 'ish-core/models/product-listing/product-listing.model';
+import { Product, ProductCompletenessLevel, ProductHelper } from 'ish-core/models/product/product.model';
 import { ViewType } from 'ish-core/models/viewtype/viewtype.types';
 import { ProductMasterVariationsService } from 'ish-core/services/product-master-variations/product-master-variations.service';
 import { selectQueryParam, selectQueryParams } from 'ish-core/store/core/router';
@@ -47,7 +47,10 @@ export class ProductListingEffects {
   ) {}
 
   initializePageSize$ = createEffect(() =>
-    this.actions$.pipe(take(1), mapTo(setProductListingPageSize({ itemsPerPage: this.itemsPerPage })))
+    this.actions$.pipe(
+      take(1),
+      mapTo(setProductListingPageSize({ itemsPerPage: this.itemsPerPage }))
+    )
   );
 
   initializeDefaultViewType$ = createEffect(() =>
@@ -94,7 +97,7 @@ export class ProductListingEffects {
       switchMap(({ id, sorting, page, filters }) =>
         this.store.pipe(
           select(getProductListingView, { ...id, sorting, filters }),
-          map(view => ({
+          map((view: ProductListingView) => ({
             id,
             sorting,
             page,
@@ -114,7 +117,7 @@ export class ProductListingEffects {
           // TODO: work-around for client side computation of master variations
           ['search', 'category'].includes(id.type)
         ) {
-          const searchParameter = b64u.toBase64(b64u.encode(filters));
+          const searchParameter = filters;
           return loadProductsForFilter({ id: { ...id, filters }, searchParameter });
         } else {
           switch (id.type) {
@@ -148,7 +151,7 @@ export class ProductListingEffects {
           // TODO: work-around for client side computation of master variations
           ['search', 'category'].includes(type)
         ) {
-          const searchParameter = b64u.toBase64(b64u.encode(filters));
+          const searchParameter = filters;
           return applyFilter({ searchParameter });
         } else {
           switch (type) {
@@ -178,11 +181,11 @@ export class ProductListingEffects {
       switchMap(({ id, filters }) =>
         this.store.pipe(
           select(getProduct, { sku: id.value }),
-          filter(p => ProductHelper.isSufficientlyLoaded(p, ProductCompletenessLevel.Detail)),
+          filter((p: Product) => ProductHelper.isSufficientlyLoaded(p, ProductCompletenessLevel.Detail)),
           filter(ProductHelper.hasVariations),
           filter(ProductHelper.isMasterProduct),
           take(1),
-          mergeMap(product => {
+          mergeMap((product: Product) => {
             const {
               filterNavigation,
               products,
@@ -191,7 +194,7 @@ export class ProductListingEffects {
             return [
               setProductListingPages(
                 this.productListingMapper.createPages(products, id.type, id.value, {
-                  filters: filters ? b64u.toBase64(b64u.encode(filters)) : undefined,
+                  filters: filters ? filters : undefined,
                 })
               ),
               loadFilterSuccess({ filterNavigation }),
