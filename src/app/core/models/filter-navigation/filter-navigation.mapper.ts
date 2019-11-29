@@ -3,6 +3,7 @@ import { Store, select } from '@ngrx/store';
 
 import { FilterData, FilterValueMap } from 'ish-core/models/filter/filter.interface';
 import { getICMStaticURL } from 'ish-core/store/core/configuration';
+import { stringToFormParams } from 'ish-core/utils/url-form-params';
 
 import { FilterNavigationData } from './filter-navigation.interface';
 import { FilterNavigation } from './filter-navigation.model';
@@ -66,7 +67,7 @@ export class FilterNavigationMapper {
               count: facet.count,
               selected: facet.selected,
               displayName: facet.displayValue || undefined,
-              searchParameter: facet.link.uri.split('?')[1] || '',
+              searchParameter: stringToFormParams(facet.link.uri.split('?')[1] || ''),
               level: facet.level || 0,
               mappedValue: facet.mappedValue || undefined,
             });

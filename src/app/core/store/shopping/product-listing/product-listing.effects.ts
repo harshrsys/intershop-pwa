@@ -24,6 +24,7 @@ import {
 import { getProduct, loadProductsForCategory } from 'ish-core/store/shopping/products';
 import { searchProducts } from 'ish-core/store/shopping/search';
 import { mapToPayload, whenFalsy, whenTruthy } from 'ish-core/utils/operators';
+import { stringToFormParams } from 'ish-core/utils/url-form-params';
 
 import {
   loadMoreProducts,
@@ -81,7 +82,7 @@ export class ProductListingEffects {
             id,
             sorting: params.sorting || undefined,
             page: +params.page || page || undefined,
-            filters: params.filters || undefined,
+            filters: stringToFormParams(params.filters) || undefined,
           }))
         )
       ),
@@ -113,7 +114,8 @@ export class ProductListingEffects {
         if (
           filters &&
           // TODO: work-around for different products/hits-result without filters
-          (id.type !== 'search' || (id.type === 'search' && filters !== `&@QueryTerm=${id.value}&OnlineFlag=1`)) &&
+          (id.type !== 'search' ||
+            (id.type === 'search' && filters.searchTerm.includes(id.value) && filters.OnlineFlag.includes('1'))) &&
           // TODO: work-around for client side computation of master variations
           ['search', 'category'].includes(id.type)
         ) {
@@ -147,7 +149,8 @@ export class ProductListingEffects {
         if (
           filters &&
           // TODO: work-around for different products/hits-result without filters
-          (type !== 'search' || (type === 'search' && filters !== `&@QueryTerm=${value}&OnlineFlag=1`)) &&
+          (type !== 'search' ||
+            (type === 'search' && filters.searchTerm.includes(value) && filters.OnlineFlag.includes('1'))) &&
           // TODO: work-around for client side computation of master variations
           ['search', 'category'].includes(type)
         ) {
