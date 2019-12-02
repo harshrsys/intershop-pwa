@@ -82,7 +82,7 @@ export class ProductListingEffects {
             id,
             sorting: params.sorting || undefined,
             page: +params.page || page || undefined,
-            filters: stringToFormParams(params.filters) || undefined,
+            filters: params.filters ? { ...stringToFormParams(params.filters), searchTerm: [id.value] } : undefined,
           }))
         )
       ),
@@ -114,8 +114,7 @@ export class ProductListingEffects {
         if (
           filters &&
           // TODO: work-around for different products/hits-result without filters
-          (id.type !== 'search' ||
-            (id.type === 'search' && filters.searchTerm.includes(id.value) && filters.OnlineFlag.includes('1'))) &&
+          (id.type !== 'search' || this.isSearchFor(filters.searchTerm, id)) &&
           // TODO: work-around for client side computation of master variations
           ['search', 'category'].includes(id.type)
         ) {
@@ -149,8 +148,7 @@ export class ProductListingEffects {
         if (
           filters &&
           // TODO: work-around for different products/hits-result without filters
-          (type !== 'search' ||
-            (type === 'search' && filters.searchTerm.includes(value) && filters.OnlineFlag.includes('1'))) &&
+          (type !== 'search' || this.isSearchFor(filters.searchTerm, { type, value })) &&
           // TODO: work-around for client side computation of master variations
           ['search', 'category'].includes(type)
         ) {
@@ -207,4 +205,8 @@ export class ProductListingEffects {
       )
     )
   );
+
+  private isSearchFor(searchTerm: string[], id: { type: string; value: string }): boolean {
+    return id.type === 'search' && searchTerm && searchTerm.includes(id.value);
+  }
 }

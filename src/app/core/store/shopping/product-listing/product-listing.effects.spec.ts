@@ -115,7 +115,7 @@ describe('Product Listing Effects', () => {
 
   describe('action triggering with filters', () => {
     beforeEach(fakeAsync(() => {
-      router.navigateByUrl('/some?filters=blablubb');
+      router.navigateByUrl('/some?filters=param%3Dblablubb');
       tick(500);
       store$.reset();
     }));
@@ -128,14 +128,24 @@ describe('Product Listing Effects', () => {
           id: {"type":"search","value":"term"}
         [Product Listing Internal] Load More Products For Params:
           id: {"type":"search","value":"term"}
-          filters: "blablubb"
+          filters: {"param":[1],"searchTerm":[1]}
           sorting: undefined
           page: undefined
         [Filter Internal] Load Products For Filter:
           id: {"type":"search","value":"term","filters":"blablubb"}
           searchParameter: "blablubb"
         [Shopping] Apply Filter:
-          searchParameter: "blablubb"
+          searchParameter: {"param":[1],"searchTerm":[1]}
+      `);
+      expect((store$.actionsArray()[1] as LoadMoreProductsForParams).payload.filters).toMatchInlineSnapshot(`
+        Object {
+          "param": Array [
+            "blablubb",
+          ],
+          "searchTerm": Array [
+            "term",
+          ],
+        }
       `);
     }));
 
@@ -147,14 +157,14 @@ describe('Product Listing Effects', () => {
           id: {"type":"category","value":"cat"}
         [Product Listing Internal] Load More Products For Params:
           id: {"type":"category","value":"cat"}
-          filters: "blablubb"
+          filters: {"param":[1],"searchTerm":[1]}
           sorting: undefined
           page: undefined
         [Filter Internal] Load Products For Filter:
           id: {"type":"category","value":"cat","filters":"blablubb"}
           searchParameter: "blablubb"
         [Shopping] Apply Filter:
-          searchParameter: "blablubb"
+          searchParameter: {"param":[1],"searchTerm":[1]}
       `);
     }));
   });

@@ -61,13 +61,19 @@ export class FilterNavigationMapper {
   private mapFacetData(filterData: FilterData) {
     return filterData.filterEntries
       ? filterData.filterEntries.reduce((acc, facet) => {
+          const category = facet.link.uri.includes('/categories/')
+            ? [facet.link.uri.split('/productfilters')[0].split('/categories/')[1]]
+            : undefined;
           if (facet.name !== 'Show all') {
             acc.push({
               name: facet.name,
               count: facet.count,
               selected: facet.selected,
               displayName: facet.displayValue || undefined,
-              searchParameter: stringToFormParams(facet.link.uri.split('?')[1] || ''),
+              searchParameter: {
+                ...stringToFormParams(facet.link.uri.split('?')[1] || ''),
+                category,
+              },
               level: facet.level || 0,
               mappedValue: facet.mappedValue || undefined,
             });
