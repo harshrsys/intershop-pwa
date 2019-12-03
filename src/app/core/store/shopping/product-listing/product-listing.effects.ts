@@ -82,7 +82,9 @@ export class ProductListingEffects {
             id,
             sorting: params.sorting || undefined,
             page: +params.page || page || undefined,
-            filters: params.filters ? { ...stringToFormParams(params.filters), searchTerm: [id.value] } : undefined,
+            filters: params.filters
+              ? { ...stringToFormParams(params.filters), ...(id.type === 'search' ? { searchTerm: [id.value] } : {}) }
+              : undefined,
           }))
         )
       ),

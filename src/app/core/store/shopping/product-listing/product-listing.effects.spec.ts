@@ -157,14 +157,14 @@ describe('Product Listing Effects', () => {
           id: {"type":"category","value":"cat"}
         [Product Listing Internal] Load More Products For Params:
           id: {"type":"category","value":"cat"}
-          filters: {"param":[1],"searchTerm":[1]}
+          filters: {"param":[1]}
           sorting: undefined
           page: undefined
         [Filter Internal] Load Products For Filter:
           id: {"type":"category","value":"cat","filters":"blablubb"}
           searchParameter: "blablubb"
         [Shopping] Apply Filter:
-          searchParameter: {"param":[1],"searchTerm":[1]}
+          searchParameter: {"param":[1]}
       `);
     }));
   });
