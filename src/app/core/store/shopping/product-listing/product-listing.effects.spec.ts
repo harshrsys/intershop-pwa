@@ -137,7 +137,8 @@ describe('Product Listing Effects', () => {
         [Shopping] Apply Filter:
           searchParameter: {"param":[1],"searchTerm":[1]}
       `);
-      expect((store$.actionsArray()[1] as LoadMoreProductsForParams).payload.filters).toMatchInlineSnapshot(`
+      // tslint:disable-next-line:no-any
+      expect((store$.actionsArray()[1] as any).payload.filters).toMatchInlineSnapshot(`
         Object {
           "param": Array [
             "blablubb",
