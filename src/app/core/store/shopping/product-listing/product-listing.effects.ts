@@ -109,6 +109,7 @@ export class ProductListingEffects {
           }))
         )
       ),
+      distinctUntilChanged((a, b) => isEqual({ ...a, viewAvailable: undefined }, { ...b, viewAvailable: undefined })),
       map(({ id, sorting, page, filters, viewAvailable }) => {
         if (viewAvailable) {
           return setProductListingPages({ id: { sorting, filters, ...id } });
