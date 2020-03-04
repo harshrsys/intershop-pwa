@@ -75,6 +75,8 @@ describe('Product Listing Effects', () => {
     it('should fire all necessary actions for search page', fakeAsync(() => {
       store$.dispatch(loadMoreProducts({ id: { type: 'search', value: 'term' } }));
 
+      tick(0);
+
       expect(store$.actionsArray()).toMatchInlineSnapshot(`
         [Product Listing] Load More Products:
           id: {"type":"search","value":"term"}
@@ -94,6 +96,8 @@ describe('Product Listing Effects', () => {
 
     it('should fire all necessary actions for family page', fakeAsync(() => {
       store$.dispatch(loadMoreProducts({ id: { type: 'category', value: 'cat' } }));
+
+      tick(0);
 
       expect(store$.actionsArray()).toMatchInlineSnapshot(`
         [Product Listing] Load More Products:
@@ -122,6 +126,8 @@ describe('Product Listing Effects', () => {
 
     it('should fire all necessary actions for search page', fakeAsync(() => {
       store$.dispatch(loadMoreProducts({ id: { type: 'search', value: 'term' } }));
+
+      tick(0);
 
       expect(store$.actionsArray()).toMatchInlineSnapshot(`
         [Product Listing] Load More Products:
@@ -152,6 +158,8 @@ describe('Product Listing Effects', () => {
 
     it('should fire all necessary actions for family page', fakeAsync(() => {
       store$.dispatch(loadMoreProducts({ id: { type: 'category', value: 'cat' } }));
+
+      tick(0);
 
       expect(store$.actionsArray()).toMatchInlineSnapshot(`
         [Product Listing] Load More Products:
