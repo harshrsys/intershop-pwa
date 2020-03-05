@@ -85,6 +85,7 @@ export class ProductListingComponent implements OnInit, OnChanges, OnDestroy {
         takeUntil(this.destroy$)
       )
       .subscribe(page => {
+        // # console.log('loadMoreProducts', this.id, page);
         this.shoppingFacade.loadMoreProducts(this.id, page);
       });
   }

@@ -1,17 +1,28 @@
 import { TestBed } from '@angular/core/testing';
+import { RouterTestingModule } from '@angular/router/testing';
+import { combineReducers } from '@ngrx/store';
 import { provideMockStore } from '@ngrx/store/testing';
 import { of } from 'rxjs';
 import { anything, instance, mock, verify, when } from 'ts-mockito';
 
+import {
+  DEFAULT_PRODUCT_LISTING_VIEW_TYPE,
+  PRODUCT_LISTING_ITEMS_PER_PAGE,
+} from 'ish-core/configurations/injection-keys';
 import { FilterNavigationData } from 'ish-core/models/filter-navigation/filter-navigation.interface';
 import { ApiService } from 'ish-core/services/api/api.service';
+import { configurationReducer } from 'ish-core/store/core/configuration/configuration.reducer';
+import { FilterEffects } from 'ish-core/store/shopping/filter/filter.effects';
+import { ProductListingEffects } from 'ish-core/store/shopping/product-listing/product-listing.effects';
+import { shoppingReducers } from 'ish-core/store/shopping/shopping-store.module';
+import { ngrxTesting } from 'ish-core/utils/dev/ngrx-testing';
 import { URLFormParams } from 'ish-core/utils/url-form-params';
 
 import { FilterService } from './filter.service';
 
 describe('Filter Service', () => {
   let apiService: ApiService;
-  let filterService;
+  let filterService: FilterService;
   const productsMock = {
     elements: [{ uri: 'products/123' }, { uri: 'products/234' }],
     total: 2,
@@ -35,7 +46,20 @@ describe('Filter Service', () => {
     apiService = mock(ApiService);
 
     TestBed.configureTestingModule({
-      providers: [FilterService, { provide: ApiService, useFactory: () => instance(apiService) }, provideMockStore()],
+      imports: [
+        RouterTestingModule,
+        ngrxTesting({
+          reducers: { configuration: configurationReducer, shopping: combineReducers(shoppingReducers) },
+          effects: [ProductListingEffects, FilterEffects],
+        }),
+      ],
+      providers: [
+        FilterService,
+        provideMockStore(),
+        { provide: ApiService, useFactory: () => instance(apiService) },
+        { provide: PRODUCT_LISTING_ITEMS_PER_PAGE, useValue: 3 },
+        { provide: DEFAULT_PRODUCT_LISTING_VIEW_TYPE, useValue: 'grid' },
+      ],
     });
     filterService = TestBed.inject(FilterService);
   });
@@ -71,13 +95,14 @@ describe('Filter Service', () => {
   });
 
   it("should get Product SKUs when 'getFilteredProducts' is called", done => {
-    when(apiService.get('products?SearchParameter=b&returnSortKeys=true')).thenReturn(of(productsMock));
-    filterService.getFilteredProducts({ SearchParameter: ['b'] } as URLFormParams).subscribe(data => {
+    when(apiService.get('products?SearchParameter=b&returnSortKeys=true', anything())).thenReturn(of(productsMock));
+
+    filterService.getFilteredProducts({ SearchParameter: ['b'] } as URLFormParams, 1).subscribe(data => {
       expect(data).toEqual({
         productSKUs: ['123', '234'],
         total: 2,
       });
-      verify(apiService.get('products?SearchParameter=b&returnSortKeys=true')).once();
+      verify(apiService.get('products?SearchParameter=b&returnSortKeys=true', anything())).once();
       done();
     });
   });

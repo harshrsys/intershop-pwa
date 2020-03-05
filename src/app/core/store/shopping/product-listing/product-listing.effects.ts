@@ -75,19 +75,31 @@ export class ProductListingEffects {
     this.actions$.pipe(
       ofType(loadMoreProducts),
       mapToPayload(),
-      switchMap(({ id, page }) =>
-        this.store.pipe(
+      switchMap(({ id, page }) => {
+        let pageFromAction = page; // scope variable (reset after first usage)
+        return this.store.pipe(
           select(selectQueryParams),
-          map(params => ({
-            id,
-            sorting: params.sorting || undefined,
-            page: +params.page || page || undefined,
-            filters: params.filters
-              ? { ...stringToFormParams(params.filters), ...(id.type === 'search' ? { searchTerm: [id.value] } : {}) }
-              : undefined,
-          }))
-        )
-      ),
+          map(params => {
+            const filters = params.filters
+              ? {
+                  ...stringToFormParams(params.filters),
+                  ...(id.type === 'search' ? { searchTerm: [id.value] } : {}),
+                }
+              : undefined;
+
+            const p = pageFromAction || +params.page || undefined; // determine page
+
+            pageFromAction = 0; // reset scope variable
+
+            return {
+              id: { ...id, filters },
+              sorting: params.sorting || undefined,
+              page: p > 1 ? p : undefined, // same content for 0, 1 & undefined
+              filters,
+            };
+          })
+        );
+      }),
       distinctUntilChanged(isEqual),
       map(({ id, filters, sorting, page }) => loadMoreProductsForParams({ id, filters, sorting, page }))
     )

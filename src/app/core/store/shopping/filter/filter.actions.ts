@@ -33,7 +33,7 @@ export const applyFilterFail = createAction('[Filter API] Apply Filter Fail', ht
 
 export const loadProductsForFilter = createAction(
   '[Filter Internal] Load Products For Filter',
-  payload<{ id: ProductListingID; searchParameter: URLFormParams }>()
+  payload<{ id: ProductListingID; searchParameter: URLFormParams; page?: number }>()
 );
 
 export const loadProductsForFilterFail = createAction('[Filter API] Load Products For Filter Fail', httpError());
