@@ -111,7 +111,7 @@ export class ProductListingEffects {
       mapToPayload(),
       switchMap(({ id, sorting, page, filters }) =>
         this.store.pipe(
-          select(getProductListingView, { ...id, sorting, filters }),
+          select(getProductListingView, { ...id, sorting, page, filters }),
           map((view: ProductListingView) => ({
             id,
             sorting,
@@ -124,7 +124,7 @@ export class ProductListingEffects {
       distinctUntilChanged((a, b) => isEqual({ ...a, viewAvailable: undefined }, { ...b, viewAvailable: undefined })),
       map(({ id, sorting, page, filters, viewAvailable }) => {
         if (viewAvailable) {
-          return setProductListingPages({ id: { sorting, filters, ...id } });
+          return setProductListingPages({ id: { page, sorting, filters, ...id } });
         }
         if (
           filters &&
@@ -134,7 +134,7 @@ export class ProductListingEffects {
           ['search', 'category'].includes(id.type)
         ) {
           const searchParameter = filters;
-          return loadProductsForFilter({ id: { ...id, filters }, searchParameter });
+          return loadProductsForFilter({ id: { ...id, filters }, searchParameter, page, sorting });
         } else {
           switch (id.type) {
             case 'category':
