@@ -53,6 +53,8 @@ server {
         add_header X-icm-default-lang $LANG always;
         add_header X-ua-device $ua_device always;
 
+        rewrite ^.*/index.html$ /loading;
+
         rewrite ^/$ /home;
 
         rewrite '^(?!.*;lang=.*)(.*)$' '$1;lang=$LANG';
