@@ -1,5 +1,3 @@
-import b64u from 'b64u';
-
 import { SearchParameter } from './search-parameter.model';
 
 export class SearchParameterMapper {
