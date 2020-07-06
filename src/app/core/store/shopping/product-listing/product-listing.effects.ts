@@ -48,10 +48,7 @@ export class ProductListingEffects {
   ) {}
 
   initializePageSize$ = createEffect(() =>
-    this.actions$.pipe(
-      take(1),
-      mapTo(setProductListingPageSize({ itemsPerPage: this.itemsPerPage }))
-    )
+    this.actions$.pipe(take(1), mapTo(setProductListingPageSize({ itemsPerPage: this.itemsPerPage })))
   );
 
   initializeDefaultViewType$ = createEffect(() =>
@@ -201,7 +198,7 @@ export class ProductListingEffects {
           filter(ProductHelper.hasVariations),
           filter(ProductHelper.isMasterProduct),
           take(1),
-          mergeMap((product: Product) => {
+          mergeMap(product => {
             const {
               filterNavigation,
               products,
