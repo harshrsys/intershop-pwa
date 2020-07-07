@@ -1,21 +1,14 @@
 import { TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
-import { combineReducers } from '@ngrx/store';
-import { provideMockStore } from '@ngrx/store/testing';
 import { of } from 'rxjs';
 import { anything, instance, mock, verify, when } from 'ts-mockito';
 
-import {
-  DEFAULT_PRODUCT_LISTING_VIEW_TYPE,
-  PRODUCT_LISTING_ITEMS_PER_PAGE,
-} from 'ish-core/configurations/injection-keys';
 import { FilterNavigationData } from 'ish-core/models/filter-navigation/filter-navigation.interface';
 import { ApiService } from 'ish-core/services/api/api.service';
-import { configurationReducer } from 'ish-core/store/core/configuration/configuration.reducer';
-import { FilterEffects } from 'ish-core/store/shopping/filter/filter.effects';
-import { ProductListingEffects } from 'ish-core/store/shopping/product-listing/product-listing.effects';
-import { shoppingReducers } from 'ish-core/store/shopping/shopping-store.module';
-import { ngrxTesting } from 'ish-core/utils/dev/ngrx-testing';
+import { CoreStoreModule } from 'ish-core/store/core/core-store.module';
+import { setProductListingPageSize } from 'ish-core/store/shopping/product-listing';
+import { ShoppingStoreModule } from 'ish-core/store/shopping/shopping-store.module';
+import { StoreWithSnapshots, provideStoreSnapshots } from 'ish-core/utils/dev/ngrx-testing';
 import { URLFormParams } from 'ish-core/utils/url-form-params';
 
 import { FilterService } from './filter.service';
@@ -41,27 +34,23 @@ describe('Filter Service', () => {
       },
     ],
   } as FilterNavigationData;
+  let store$: StoreWithSnapshots;
 
   beforeEach(() => {
     apiService = mock(ApiService);
 
     TestBed.configureTestingModule({
-      imports: [
-        RouterTestingModule,
-        ngrxTesting({
-          reducers: { configuration: configurationReducer, shopping: combineReducers(shoppingReducers) },
-          effects: [ProductListingEffects, FilterEffects],
-        }),
-      ],
+      imports: [CoreStoreModule.forTesting(), RouterTestingModule, ShoppingStoreModule.forTesting('productListing')],
       providers: [
         FilterService,
-        provideMockStore(),
         { provide: ApiService, useFactory: () => instance(apiService) },
-        { provide: PRODUCT_LISTING_ITEMS_PER_PAGE, useValue: 3 },
-        { provide: DEFAULT_PRODUCT_LISTING_VIEW_TYPE, useValue: 'grid' },
+        provideStoreSnapshots(),
       ],
     });
     filterService = TestBed.inject(FilterService);
+
+    store$ = TestBed.inject(StoreWithSnapshots);
+    store$.dispatch(setProductListingPageSize({ itemsPerPage: 2 }));
   });
 
   it('should be created', () => {

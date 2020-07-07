@@ -10,7 +10,7 @@ const _ = {
   results: 23,
   filter: {
     name: 'Price',
-    entryName: 'ProductSalePriceGross_100_-_250',
+    entryName: 'ProductSalePriceGross_100_0_TO_249_99',
     results: 16,
   },
 };
@@ -34,10 +34,7 @@ describe('Searching User', () => {
   // tslint:disable-next-line:no-disabled-tests
   xit('should see the correct filter', () => {
     at(SearchResultPage, page => {
-      page.filterNavigation
-        .filter('Color')
-        .getFilter('Red')
-        .should('be.visible');
+      page.filterNavigation.filter('Color').getFilter('Red').should('be.visible');
 
       page.filterNavigation
         .filter(_.filter.name)

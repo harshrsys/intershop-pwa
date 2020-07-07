@@ -133,14 +133,16 @@ describe('Product Listing Effects', () => {
         [Product Listing] Load More Products:
           id: {"type":"search","value":"term"}
         [Product Listing Internal] Load More Products For Params:
-          id: {"type":"search","value":"term"}
+          id: {"type":"search","value":"term","filters":{"param":[1],"sear...
           filters: {"param":[1],"searchTerm":[1]}
           sorting: undefined
           page: undefined
         [Filter Internal] Load Products For Filter:
-          id: {"type":"search","value":"term","filters":"blablubb"}
-          searchParameter: "blablubb"
-        [Shopping] Apply Filter:
+          id: {"type":"search","value":"term","filters":{"param":[1],"sear...
+          searchParameter: {"param":[1],"searchTerm":[1]}
+          page: undefined
+          sorting: undefined
+        [Filter] Apply Filter:
           searchParameter: {"param":[1],"searchTerm":[1]}
       `);
       // tslint:disable-next-line:no-any
@@ -165,14 +167,16 @@ describe('Product Listing Effects', () => {
         [Product Listing] Load More Products:
           id: {"type":"category","value":"cat"}
         [Product Listing Internal] Load More Products For Params:
-          id: {"type":"category","value":"cat"}
+          id: {"type":"category","value":"cat","filters":{"param":[1]}}
           filters: {"param":[1]}
           sorting: undefined
           page: undefined
         [Filter Internal] Load Products For Filter:
-          id: {"type":"category","value":"cat","filters":"blablubb"}
-          searchParameter: "blablubb"
-        [Shopping] Apply Filter:
+          id: {"type":"category","value":"cat","filters":{"param":[1]}}
+          searchParameter: {"param":[1]}
+          page: undefined
+          sorting: undefined
+        [Filter] Apply Filter:
           searchParameter: {"param":[1]}
       `);
     }));

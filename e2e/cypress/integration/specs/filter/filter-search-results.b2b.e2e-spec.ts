@@ -34,10 +34,7 @@ xdescribe('Searching B2B User', () => {
 
   it('should see the correct filter', () => {
     at(SearchResultPage, page => {
-      page.filterNavigation
-        .filter('Color')
-        .getFilter('Red')
-        .should('be.visible');
+      page.filterNavigation.filter('Color').getFilter('Red').should('be.visible');
 
       page.filterNavigation
         .filter(_.filter.name)

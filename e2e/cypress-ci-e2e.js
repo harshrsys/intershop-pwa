@@ -24,7 +24,7 @@ if (!process.env.ICM_BASE_URL) {
 
 const DEFAULT_CONFIG = {
   browser: BROWSER,
-  defaultCommandTimeout: 25000,
+  defaultCommandTimeout: 15000,
   reporter: 'junit',
   reporterOptions: 'mochaFile=reports/e2e-remote-[hash]-report.xml,includePending=true',
   numTestsKeptInMemory: 1,

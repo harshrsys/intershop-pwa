@@ -1,14 +1,11 @@
-<div class="product-list row" style="position: relative;">
+<div class="product-list row">
   <div *ngIf="!products.length">
     <ng-container *ngIf="!(listingLoading$ | async)">
       {{ 'search.noresult.filtered_products.message' | translate }}
     </ng-container>
   </div>
 
-  <div
-    *ngIf="listingLoading$ | async"
-    style="position: absolute; top:0; left: 50%; z-index: 1; transform: translateX(-50%);"
-  >
+  <div *ngIf="listingLoading$ | async" class="product-list-loading">
     <ish-loading [standalone]="true"></ish-loading>
   </div>
 

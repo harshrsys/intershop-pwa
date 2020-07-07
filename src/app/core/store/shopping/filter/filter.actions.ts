@@ -35,5 +35,3 @@ export const loadProductsForFilter = createAction(
   '[Filter Internal] Load Products For Filter',
   payload<{ id: ProductListingID; searchParameter: URLFormParams; page?: number; sorting?: string }>()
 );
-
-export const loadProductsForFilterFail = createAction('[Filter API] Load Products For Filter Fail', httpError());

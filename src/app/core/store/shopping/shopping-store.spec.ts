@@ -41,15 +41,9 @@ import { getRecentlyViewedProducts } from './recently';
 import { suggestSearch } from './search';
 import { ShoppingStoreModule } from './shopping-store.module';
 
-const getCategoryIds = createSelector(
-  getCategoryTree,
-  tree => Object.keys(tree.nodes)
-);
+const getCategoryIds = createSelector(getCategoryTree, tree => Object.keys(tree.nodes));
 
-const getProductIds = createSelector(
-  getProductEntities,
-  entities => Object.keys(entities)
-);
+const getProductIds = createSelector(getProductEntities, entities => Object.keys(entities));
 
 describe('Shopping Store', () => {
   let store: StoreWithSnapshots;
@@ -351,8 +345,6 @@ describe('Shopping Store', () => {
             sortKeys: []
           [Filter API] Load Filter Success:
             filterNavigation: {}
-          [Product Listing Internal] Set Product Listing Pages:
-            id: {"type":"search","value":"something"}
         `);
       }));
 
@@ -530,8 +522,6 @@ describe('Shopping Store', () => {
           sortKeys: []
         [Filter API] Load Filter Success:
           filterNavigation: {}
-        [Product Listing Internal] Set Product Listing Pages:
-          id: {"type":"category","value":"A.123.456"}
       `);
     }));
 
@@ -636,8 +626,6 @@ describe('Shopping Store', () => {
             sortKeys: []
           [Filter API] Load Filter Success:
             filterNavigation: {}
-          [Product Listing Internal] Set Product Listing Pages:
-            id: {"type":"search","value":"something"}
         `);
       }));
 
@@ -798,8 +786,6 @@ describe('Shopping Store', () => {
             sortKeys: []
           [Filter API] Load Filter Success:
             filterNavigation: {}
-          [Product Listing Internal] Set Product Listing Pages:
-            id: {"type":"category","value":"A.123.456"}
           @ngrx/router-store/navigated:
             routerState: {"url":"/category/A.123.456","params":{"categoryUniqueId":"A...
             event: {"id":2,"url":"/category/A.123.456"}
@@ -1082,8 +1068,6 @@ describe('Shopping Store', () => {
           sortKeys: []
         [Filter API] Load Filter Success:
           filterNavigation: {}
-        [Product Listing Internal] Set Product Listing Pages:
-          id: {"type":"search","value":"something"}
       `);
     }));
   });

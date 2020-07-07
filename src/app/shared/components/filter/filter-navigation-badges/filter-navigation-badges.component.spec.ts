@@ -61,14 +61,12 @@ describe('Filter Navigation Badges Component', () => {
         <div class="col-md-10 col-xs-12">
           <div class="filter-navigation-badges">
             <a>
-              Color: blue
-              <fa-icon class="form-control-feedback" ng-reflect-icon-prop="fas,times"></fa-icon
+              Color: blue <fa-icon class="form-control-feedback" ng-reflect-icon="fas,times"></fa-icon
             ></a>
           </div>
           <div class="filter-navigation-badges">
             <a>
-              Color: black
-              <fa-icon class="form-control-feedback" ng-reflect-icon-prop="fas,times"></fa-icon
+              Color: black <fa-icon class="form-control-feedback" ng-reflect-icon="fas,times"></fa-icon
             ></a>
           </div>
           <div class="filter-navigation-badges">

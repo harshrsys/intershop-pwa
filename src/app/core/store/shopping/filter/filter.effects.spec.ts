@@ -110,7 +110,7 @@ describe('Filter Effects', () => {
 
   describe('applyFilter$', () => {
     it('should call the filterService for ApplyFilter action', done => {
-      const action = applyFilter({ searchParameter: 'b' });
+      const action = applyFilter({ searchParameter: { param: ['b'] } });
       actions$ = of(action);
 
       effects.applyFilter$.subscribe(() => {
@@ -120,7 +120,7 @@ describe('Filter Effects', () => {
     });
 
     it('should map to action of type ApplyFilterSuccess', () => {
-      const action = applyFilter({ searchParameter: 'b' });
+      const action = applyFilter({ searchParameter: { param: ['b'] } });
       const completion = applyFilterSuccess({
         availableFilter: filterNav,
         searchParameter: { param: ['b'] },
@@ -132,7 +132,7 @@ describe('Filter Effects', () => {
     });
 
     it('should map invalid request to action of type ApplyFilterFail', () => {
-      const action = applyFilter({ searchParameter: 'invalid' });
+      const action = applyFilter({ searchParameter: { param: ['invalid'] } });
       const completion = applyFilterFail({ error: { message: 'invalid' } as HttpError });
       actions$ = hot('-a-a-a', { a: action });
       const expected$ = cold('-c-c-c', { c: completion });

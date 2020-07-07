@@ -36,12 +36,12 @@ export class FilterNavigationMapper {
   /**
    * parse ish-link to
    */
-  private parseFilterValue(filerEntry: FacetData): string {
-    if (filerEntry.mappedType === 'image' && filerEntry.mappedValue) {
-      const urlParts = filerEntry.mappedValue.split(':');
+  private parseFilterValue(filterEntry: FacetData): string {
+    if (filterEntry.mappedType === 'image' && filterEntry.mappedValue) {
+      const urlParts = filterEntry.mappedValue.split(':');
       return `url(${this.icmStaticURL}/${urlParts[0]}/-${urlParts[1]})`;
     }
-    return filerEntry.mappedValue;
+    return filterEntry.mappedValue;
   }
 
   private mapFacetData(filterData: FilterData) {

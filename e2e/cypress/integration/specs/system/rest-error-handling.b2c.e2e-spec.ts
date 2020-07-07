@@ -89,8 +89,7 @@ describe('Missing Data', () => {
       });
     });
 
-    // tslint:disable-next-line:no-disabled-tests
-    xit('should not lead to complete redirect to error page', () => {
+    it('should not lead to complete redirect to error page', () => {
       at(HomePage, page => {
         page.header.searchBox.search('kodak');
       });

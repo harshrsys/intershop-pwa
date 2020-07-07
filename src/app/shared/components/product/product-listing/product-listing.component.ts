@@ -14,7 +14,6 @@ import { whenFalsy, whenTruthy } from 'ish-core/utils/operators';
   templateUrl: './product-listing.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-// tslint:disable-next-line:ccp-no-markup-in-containers
 export class ProductListingComponent implements OnInit, OnChanges, OnDestroy {
   @Input() category?: Category;
   @Input() id: ProductListingID;
@@ -85,7 +84,6 @@ export class ProductListingComponent implements OnInit, OnChanges, OnDestroy {
         takeUntil(this.destroy$)
       )
       .subscribe(page => {
-        // # console.log('loadMoreProducts', this.id, page);
         this.shoppingFacade.loadMoreProducts(this.id, page);
       });
   }

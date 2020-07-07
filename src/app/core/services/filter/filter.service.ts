@@ -19,12 +19,12 @@ import { URLFormParams, formParamsToString } from 'ish-core/utils/url-form-param
 
 @Injectable({ providedIn: 'root' })
 export class FilterService {
-  itemsPerPage: number;
+  private itemsPerPage: number;
 
   constructor(
     private apiService: ApiService,
     private filterNavigationMapper: FilterNavigationMapper,
-    private store: Store<{}>
+    private store: Store
   ) {
     this.store
       .pipe(select(getProductListingItemsPerPage))
@@ -33,7 +33,6 @@ export class FilterService {
 
   getFilterForCategory(categoryUniqueId: string): Observable<FilterNavigation> {
     const categoryPath = categoryUniqueId.split('.').join('/');
-    // TODO from REST
     return this.applyFilterWithCategory('', categoryPath).pipe(
       map(filter => this.filterNavigationMapper.fromData(filter))
     );
