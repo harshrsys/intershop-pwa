@@ -64,7 +64,9 @@ export class ShoppingFacade {
   }
 
   navigationCategories$(uniqueId?: string) {
-    this.store.dispatch(loadTopLevelCategories());
+    if (!uniqueId) {
+      this.store.dispatch(loadTopLevelCategories());
+    }
     return this.store.pipe(select(getNavigationCategories(uniqueId)));
   }
 
