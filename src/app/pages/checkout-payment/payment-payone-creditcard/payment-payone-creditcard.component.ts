@@ -73,18 +73,21 @@ export class PaymentPayoneCreditcardComponent implements OnChanges, OnDestroy, O
   loadScript() {
     // load script only once if component becomes visible
     if (this.activated) {
-      const requestParam = this.getParamValue('request', 'checkout.credit_card.request.param.error.notFound');
-      const configParam = this.getParamValue('config', 'checkout.credit_card.config.param.error.notFound');
+
+      const requestParam = JSON.parse(this.getParamValue('request', 'checkout.credit_card.request.param.error.notFound'));
+      let configParam = JSON.parse(this.getParamValue('config', 'checkout.credit_card.config.param.error.notFound'));
+
 
       this.scriptLoaded = true;
       this.scriptLoader
         .load('https://secure.pay1.de/client-api/js/v1/payone_hosted_min.js')
         .pipe(takeUntil(this.destroy$))
         .subscribe(() => {
+          // append localization language: Payone.ClientApi.Language.en, Language to display error-messages (default:Payone.ClientApi.Language.en)
+          configParam.language = eval(this.getParamValue('language', ''));
+
           const request = requestParam;
           const config = configParam;
-          console.log(request);
-          console.log(config);
 
           // setup
           this.iframes = new Payone.ClientApi.HostedIFrames(config, request);
@@ -93,18 +96,44 @@ export class PaymentPayoneCreditcardComponent implements OnChanges, OnDestroy, O
   }
 
   /**
-   * submit cybersource payment form
-   */
-  submitNewPaymentInstrument() {
-    console.log("submit happened");
-  }
-
-  /**
    * cancel new payment instrument, hides and resets the parameter form
    */
   cancelNewPaymentInstrument() {
     this.payoneCreditCardForm.reset();
     this.cancel.emit();
+  }
+
+  /**
+   * submit cybersource payment form
+   */
+  submitNewPaymentInstrument() {
+    console.log("submit happened");
+    if (this.iframes.isComplete()) {
+      // Perform "CreditCardCheck" to create and get a PseudoCardPan; then call your function "payCallback"
+
+      //this.iframes.creditCardCheck('payoneCreditCardCallback');
+      this.iframes.creditCardCheck((response) => this.payoneCreditCardCallback(response));
+      console.log("callback method not working");
+    }
+  }
+
+  public payoneCreditCardCallback(response: any/*: {status: string, pseudocardpan: string, truncatedcardpan: string}*/) {
+
+    console.log("inside callback method");
+    console.log(response);
+    //this.resetErrors();
+
+    /*if (response.status === "VALID" && !this.payoneCreditCardForm.invalid) {
+      this.submit.emit({
+        parameters: [
+          { name: 'pseudocardpan', value: response.pseudocardpan },
+          { name: 'truncatedcardpan', value: response.truncatedcardpan },
+        ],
+        saveAllowed: false,
+      });
+    }
+    // else: error message is shown in the error div
+    this.cd.detectChanges();*/
   }
 
 }
