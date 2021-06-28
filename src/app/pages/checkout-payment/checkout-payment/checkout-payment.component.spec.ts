@@ -27,6 +27,7 @@ import { PaymentCybersourceCreditcardComponent } from '../payment-cybersource-cr
 import { PaymentParameterFormComponent } from '../payment-parameter-form/payment-parameter-form.component';
 
 import { CheckoutPaymentComponent } from './checkout-payment.component';
+import { PaymentPayoneDirectdebitManageMandateComponent } from '../payment-payone-directdebit-manage-mandate/payment-payone-directdebit-manage-mandate.component';
 
 describe('Checkout Payment Component', () => {
   let component: CheckoutPaymentComponent;
@@ -55,6 +56,7 @@ describe('Checkout Payment Component', () => {
         MockComponent(PaymentConcardisCreditcardCvcDetailComponent),
         MockComponent(PaymentConcardisDirectdebitComponent),
         MockComponent(PaymentCybersourceCreditcardComponent),
+        MockComponent(PaymentPayoneDirectdebitManageMandateComponent),
         MockDirective(ServerHtmlDirective),
         MockPipe(PricePipe),
         PaymentParameterFormComponent,
